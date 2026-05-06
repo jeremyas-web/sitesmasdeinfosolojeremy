@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Módulo 2 - Pedidos</title>
+    <link rel="stylesheet" href="modulo2-styles.css">
+</head>
+<body>
+
+<h1>Registro de Pedidos</h1>
+
+<form id="formPedido">
+
+    <input type="text" id="codigoPedido" readonly>
+
+    <div class="grid">
+        <input type="text" id="mozo" placeholder="Nombre del mozo">
+        <input type="number" id="mesa" placeholder="Mesa">
+    </div>
+
+    <div class="fila">
+        <select id="platoSelect"></select>
+        <input type="number" id="cantidad" placeholder="Cantidad">
+        <input type="text" id="obs" placeholder="Observación">
+        <button type="button" onclick="agregarPlato()">Agregar</button>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Plato</th>
+                <th>Cant</th>
+                <th>Precio</th>
+                <th>Subtotal</th>
+                <th>Obs</th>
+            </tr>
+        </thead>
+        <tbody id="detalle"></tbody>
+    </table>
+
+    <div class="resumen">
+        <p>Total: <span>S/ <span id="total">0.00</span></span></p>
+        <p>Tiempo estimado: <span id="tiempoTotal">0</span> min</p>
+    </div>
+
+    <div class="grid">
+        <select id="prioridad">
+            <option>Normal</option>
+            <option>Alta</option>
+            <option>Urgente</option>
+        </select>
+
+        <input type="text" id="justificacion" placeholder="Justificación" style="display:none;">
+    </div>
+
+    <button type="submit">Guardar Pedido</button>
+</form>
+
+<h2>Pedidos</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Código</th>
+            <th>Mesa</th>
+            <th>Mozo</th>
+            <th>Total</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody id="tablaPedidos"></tbody>
+</table>
+
+<script src="modulo2-script.js"></script>
+
+</body>
+</html>

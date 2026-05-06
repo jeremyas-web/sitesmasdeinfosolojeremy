@@ -1,0 +1,96 @@
+/* RESET */
+* {
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+/* BODY */
+body {
+    margin: 0;
+    padding: 30px;
+    background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+}
+
+/* TITULOS */
+h1, h2 {
+    text-align: center;
+    color: #333;
+}
+
+/* CONTENEDOR */
+form, body > * {
+    max-width: 900px;
+    margin: auto;
+}
+
+/* INPUTS */
+input, select {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    transition: 0.3s;
+    width: auto;
+}
+
+input:focus, select:focus {
+    border-color: #1e90ff;
+    box-shadow: 0 0 6px rgba(30,144,255,0.4);
+    outline: none;
+}
+
+/* BOTONES */
+button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #1e90ff, #0f6cd1);
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* TABLA */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+thead {
+    background: #1e90ff;
+    color: white;
+}
+
+th, td {
+    padding: 12px;
+    text-align: center;
+}
+
+tbody tr:nth-child(even) {
+    background: #f2f2f2;
+}
+
+tbody tr:hover {
+    background: #eaf4ff;
+}
+
+/* RESUMEN */
+p {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* SEPARACIÓN */
+input, select, button {
+    margin: 8px 5px;
+}

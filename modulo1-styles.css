@@ -1,0 +1,154 @@
+/* RESET */
+* {
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* FONDO */
+body {
+    margin: 0;
+    padding: 20px;
+    background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+}
+
+/* TÍTULOS */
+h1, h2 {
+    text-align: center;
+    color: #333;
+}
+
+/* FORMULARIO */
+form {
+    max-width: 700px;
+    margin: auto;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+/* LABELS */
+label {
+    font-weight: bold;
+    margin-top: 10px;
+    display: block;
+}
+
+/* INPUTS */
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    outline: none;
+    transition: 0.2s;
+}
+
+/* FOCUS */
+input:focus, select:focus, textarea:focus {
+    border-color: #1e90ff;
+    box-shadow: 0 0 5px rgba(30,144,255,0.4);
+}
+
+/* BOTÓN */
+button {
+    margin-top: 15px;
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #1e90ff, #0f6cd1);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: scale(1.03);
+    background: linear-gradient(135deg, #0f6cd1, #0a4ea3);
+}
+
+/* ALÉRGENOS */
+#alergenos {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 5px;
+    margin-top: 5px;
+}
+
+#alergenos label {
+    font-weight: normal;
+}
+
+/* BUSCADOR */
+#buscar, #filtroEstado {
+    max-width: 300px;
+    margin: 10px auto;
+    display: block;
+}
+
+/* TABLA */
+table {
+    width: 95%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* ENCABEZADO */
+thead {
+    background: #1e90ff;
+    color: white;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+}
+
+/* FILAS */
+tbody tr:nth-child(even) {
+    background: #f2f2f2;
+}
+
+tbody tr:hover {
+    background: #e6f0ff;
+}
+
+/* BOTONES ACCIONES */
+td button {
+    padding: 5px 10px;
+    margin: 2px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+/* COLORES */
+td button:nth-child(1) {
+    background: #ffc107;
+    color: black;
+}
+
+td button:nth-child(2) {
+    background: #dc3545;
+    color: white;
+}
+
+td button:nth-child(3) {
+    background: #28a745;
+    color: white;
+}
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+    #alergenos {
+        grid-template-columns: 1fr;
+    }
+}

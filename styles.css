@@ -1,0 +1,105 @@
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* BODY */
+body {
+    display: flex;
+    height: 100vh;
+    background: #f4f6f9;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+    width: 240px;
+    background: linear-gradient(180deg, #1e90ff, #0f6cd1);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+/* LOGO / TÍTULO */
+.sidebar h2 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* BOTONES */
+.sidebar button {
+    background: transparent;
+    border: none;
+    color: white;
+    padding: 12px;
+    text-align: left;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: 0.3s;
+    font-size: 15px;
+}
+
+.sidebar button:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+.sidebar button.activo {
+    background: white;
+    color: #1e90ff;
+    font-weight: bold;
+}
+
+/* ===== CONTENIDO ===== */
+.content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+/* HEADER */
+.header {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* MODULOS */
+.modulo {
+    display: none;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.modulo.activo {
+    display: block;
+}
+
+/* IFRAME */
+iframe {
+    width: 100%;
+    height: 80vh;
+    border: none;
+    border-radius: 10px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 70px;
+    }
+
+    .sidebar h2 {
+        display: none;
+    }
+
+    .sidebar button {
+        text-align: center;
+        font-size: 12px;
+    }
+}

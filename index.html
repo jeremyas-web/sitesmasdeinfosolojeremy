@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>A la orden</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ===== SIDEBAR ===== -->
+<div class="sidebar">
+    <h2>🍽 A la orden</h2>
+
+    <button class="activo" onclick="mostrarModulo('mod1', this)">🍔 Platos</button>
+    <button onclick="mostrarModulo('mod2', this)">📋 Pedidos</button>
+    <button onclick="mostrarModulo('mod4', this)">💳 Facturación</button>
+</div>
+
+<!-- ===== CONTENIDO ===== -->
+<div class="content">
+    <div class="header">Sistema de Restaurante</div>
+
+    <div id="mod1" class="modulo activo">
+        <iframe src="modulo1-index.html"></iframe>
+    </div>
+
+    <div id="mod2" class="modulo">
+        <iframe src="modulo2-index.html"></iframe>
+    </div>
+
+    <div id="mod4" class="modulo">
+        <iframe src="modulo3-index.html"></iframe>
+    </div>
+</div>
+
+<script>
+function mostrarModulo(id, btn) {
+    document.querySelectorAll(".modulo").forEach(m => m.classList.remove("activo"));
+    document.getElementById(id).classList.add("activo");
+
+    document.querySelectorAll(".sidebar button").forEach(b => b.classList.remove("activo"));
+    btn.classList.add("activo");
+}
+</script>
+
+</body>
+</html>

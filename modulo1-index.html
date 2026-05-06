@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Módulo 1 - Registro de Platos</title>
+    <link rel="stylesheet" href="modulo1-styles.css">
+</head>
+<body>
+
+<h1>Registro de Platos</h1>
+
+<form id="formPlato">
+    <input type="hidden" id="editIndex">
+
+    <label>Código</label>
+    <input type="text" id="codigo">
+
+    <label>Nombre</label>
+    <input type="text" id="nombre">
+
+    <label>Descripción</label>
+    <textarea id="descripcion"></textarea>
+
+    <label>Categoría</label>
+    <select id="categoria">
+        <option value="">Seleccione</option>
+        <option>Entrada</option>
+        <option>Plato de fondo</option>
+        <option>Postre</option>
+        <option>Bebida</option>
+        <option>Menú ejecutivo</option>
+        <option>Especial de la casa</option>
+    </select>
+
+    <label>Precio</label>
+    <input type="number" id="precio" step="0.01">
+
+    <label>Tiempo (min)</label>
+    <input type="number" id="tiempo">
+
+    <label>Estado</label>
+    <select id="estado">
+        <option value="Activo">Activo</option>
+        <option value="Inactivo">Inactivo</option>
+    </select>
+
+    <label>Alérgenos</label>
+    <div id="alergenos">
+        <label><input type="checkbox" value="Gluten">Gluten</label>
+        <label><input type="checkbox" value="Lactosa">Lactosa</label>
+        <label><input type="checkbox" value="Maní">Maní</label>
+        <label><input type="checkbox" value="Mariscos">Mariscos</label>
+        <label><input type="checkbox" value="Huevo">Huevo</label>
+        <label><input type="checkbox" value="Soya">Soya</label>
+        <label><input type="checkbox" value="Frutos secos">Frutos secos</label>
+        <label><input type="checkbox" value="Ninguno">Ninguno</label>
+        <label><input type="checkbox" value="Otro" id="checkOtro">Otro</label>
+    </div>
+
+    <input type="text" id="otroAlergeno" placeholder="Especifique otro alérgeno" disabled>
+
+    <label>Ingredientes modificables</label>
+    <textarea id="modificables"></textarea>
+
+    <button type="submit">Guardar</button>
+</form>
+
+<hr>
+
+<h2>Buscar / Filtrar</h2>
+<input type="text" id="buscar" placeholder="Buscar por nombre">
+<select id="filtroEstado">
+    <option value="Todos">Todos</option>
+    <option value="Activo">Activo</option>
+    <option value="Inactivo">Inactivo</option>
+</select>
+
+<h2>Lista de Platos</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Código</th>
+            <th>Nombre</th>
+            <th>Categoría</th>
+            <th>Precio</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody id="tablaPlatos"></tbody>
+</table>
+
+<script src="modulo1-script.js"></script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Facturación</title>
+    <link rel="stylesheet" href="modulo3-styles.css">
+</head>
+
+<body>
+
+<h1>Facturación</h1>
+
+<form>
+
+<!-- BUSCAR MESA -->
+<div class="grid">
+    <input type="number" id="mesaBuscar" placeholder="Número de mesa">
+    <button type="button" onclick="buscarPedidos()">Buscar</button>
+</div>
+
+<h2>Pedidos encontrados</h2>
+
+<!-- TABLA -->
+<table>
+    <thead>
+        <tr>
+            <th>Código</th>
+            <th>Mozo</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody id="tablaPedidos"></tbody>
+</table>
+
+<!-- SUBTOTAL -->
+<div class="resumen">
+    <span>Subtotal:</span>
+    <span>S/ <span id="subtotal">0.00</span></span>
+</div>
+
+<!-- DESCUENTO -->
+<div class="grid">
+    <input type="number" id="descuento" placeholder="Descuento">
+    <input type="text" id="justDesc" placeholder="Justificación" style="display:none;">
+</div>
+
+<!-- TOTAL -->
+<div class="resumen">
+    <span>Total:</span>
+    <span>S/ <span id="total">0.00</span></span>
+</div>
+
+<!-- MÉTODO -->
+<div class="grid">
+    <select id="metodo">
+        <option>Efectivo</option>
+        <option>Tarjeta</option>
+        <option>Yape</option>
+    </select>
+
+    <input type="number" id="recibido" placeholder="Monto recibido">
+</div>
+
+<!-- VUELTO -->
+<div class="resumen">
+    <span>Vuelto:</span>
+    <span>S/ <span id="vuelto">0.00</span></span>
+</div>
+
+<!-- BOTÓN -->
+<button type="button" onclick="confirmarPago()">
+    Confirmar Pago
+</button>
+
+</form>
+
+<script src="modulo3-script.js"></script>
+
+</body>
+</html>
