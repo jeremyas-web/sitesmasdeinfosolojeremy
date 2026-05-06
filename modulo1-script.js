@@ -2,6 +2,7 @@ const form = document.getElementById("formPlato");
 const tabla = document.getElementById("tablaPlatos");
 
 let platos = JSON.parse(localStorage.getItem("platos")) || [];
+let pedidos = JSON.parse(localStorage.getItem("pedidos")) || []; // 🔥 NUEVO
 
 document.getElementById("checkOtro").addEventListener("change", function() {
     document.getElementById("otroAlergeno").disabled = !this.checked;
@@ -27,25 +28,37 @@ form.addEventListener("submit", function(e) {
 
     let otro = document.getElementById("otroAlergeno").value.trim();
 
-    // VALIDACIONES
-    if (codigo.length < 3) return alert("Código inválido");
+    // ================= VALIDACIONES =================
+
+    // 🔥 CÓDIGO FORMATO
+    if (!/^PLT\d{3}$/.test(codigo))
+        return alert("Código debe ser tipo PLT001");
+
     if (platos.some((p, i) => p.codigo === codigo && i != editIndex))
         return alert("Código duplicado");
 
-    if (nombre.length < 3 || nombre.length > 60 || !isNaN(nombre))
+    // 🔥 NOMBRE SIN NÚMEROS
+    if (nombre.length < 3 || nombre.length > 60 || /\d/.test(nombre))
         return alert("Nombre inválido");
 
-    if (descripcion.length < 10 || descripcion.length > 250)
+    // 🔥 DESCRIPCIÓN MÁS REAL
+    if (descripcion.length < 10 || descripcion.length > 250 || !/[a-zA-Z]/.test(descripcion))
         return alert("Descripción inválida");
 
-    if (!categoria) return alert("Seleccione categoría");
+    // 🔥 CATEGORÍA SEGURA
+    const categoriasValidas = ["Entrada", "Plato fuerte", "Bebida", "Postre"];
+    if (!categoriasValidas.includes(categoria))
+        return alert("Categoría inválida");
 
+    // 🔥 PRECIO
     if (isNaN(precio) || precio <= 0 || precio > 500)
         return alert("Precio inválido");
 
+    // 🔥 TIEMPO
     if (isNaN(tiempo) || tiempo < 1 || tiempo > 120)
         return alert("Tiempo inválido");
 
+    // 🔥 ALÉRGENOS
     if (alergenos.length === 0)
         return alert("Seleccione al menos un alérgeno");
 
@@ -55,13 +68,28 @@ form.addEventListener("submit", function(e) {
     if (alergenos.includes("Otro") && otro === "")
         return alert("Debe especificar el otro alérgeno");
 
+    // 🔥 GUARDAR "OTRO"
+    if (alergenos.includes("Otro")) {
+        alergenos = alergenos.filter(a => a !== "Otro");
+        alergenos.push(otro);
+    }
+
+    // 🔥 MODIFICABLES
     if (modificables.length === 0 || modificables.length > 200)
         return alert("Ingredientes modificables inválidos");
 
+    // ================= OBJETO =================
+
     let plato = {
-        codigo, nombre, descripcion, categoria,
-        precio: precio.toFixed(2),
-        tiempo, estado, alergenos, modificables
+        codigo,
+        nombre,
+        descripcion,
+        categoria,
+        precio, // 🔥 ahora número (no string)
+        tiempo,
+        estado,
+        alergenos,
+        modificables
     };
 
     if (editIndex === "") {
@@ -77,6 +105,7 @@ form.addEventListener("submit", function(e) {
     mostrarPlatos();
 });
 
+// ================= MOSTRAR =================
 function mostrarPlatos() {
     tabla.innerHTML = "";
 
@@ -93,7 +122,7 @@ function mostrarPlatos() {
             <td>${p.codigo}</td>
             <td>${p.nombre}</td>
             <td>${p.categoria}</td>
-            <td>S/ ${p.precio}</td>
+            <td>S/ ${Number(p.precio).toFixed(2)}</td>
             <td>${p.estado}</td>
             <td>
                 <button onclick="editar(${i})">Editar</button>
@@ -106,6 +135,7 @@ function mostrarPlatos() {
     });
 }
 
+// ================= EDITAR =================
 function editar(i) {
     let p = platos[i];
 
@@ -121,7 +151,15 @@ function editar(i) {
     document.getElementById("editIndex").value = i;
 }
 
+// ================= ELIMINAR =================
 function eliminar(i) {
+    let usado = pedidos.some(p =>
+        p.platos?.some(pl => pl.codigo === platos[i].codigo)
+    );
+
+    if (usado)
+        return alert("No se puede eliminar, ya fue usado en pedidos");
+
     if (confirm("¿Eliminar plato?")) {
         platos.splice(i, 1);
         localStorage.setItem("platos", JSON.stringify(platos));
@@ -129,12 +167,14 @@ function eliminar(i) {
     }
 }
 
+// ================= ESTADO =================
 function toggleEstado(i) {
     platos[i].estado = platos[i].estado === "Activo" ? "Inactivo" : "Activo";
     localStorage.setItem("platos", JSON.stringify(platos));
     mostrarPlatos();
 }
 
+// ================= FILTROS =================
 document.getElementById("buscar").addEventListener("input", mostrarPlatos);
 document.getElementById("filtroEstado").addEventListener("change", mostrarPlatos);
 

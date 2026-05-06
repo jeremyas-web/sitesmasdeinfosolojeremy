@@ -11,20 +11,28 @@
 
 <form id="formPedido">
 
+    <!-- CÓDIGO -->
+    <label>Código:</label>
     <input type="text" id="codigoPedido" readonly>
 
+    <!-- FECHA -->
+    <p>Fecha: <span id="fechaPedido"></span></p>
+
+    <!-- DATOS -->
     <div class="grid">
-        <input type="text" id="mozo" placeholder="Nombre del mozo">
-        <input type="number" id="mesa" placeholder="Mesa">
+        <input type="text" id="mozo" placeholder="Nombre del mozo" required>
+        <input type="number" id="mesa" placeholder="Mesa" min="1" max="50" required>
     </div>
 
+    <!-- AGREGAR PLATO -->
     <div class="fila">
         <select id="platoSelect"></select>
-        <input type="number" id="cantidad" placeholder="Cantidad">
-        <input type="text" id="obs" placeholder="Observación">
+        <input type="number" id="cantidad" placeholder="Cantidad" min="1">
+        <input type="text" id="obs" placeholder="Observación" maxlength="150">
         <button type="button" onclick="agregarPlato()">Agregar</button>
     </div>
 
+    <!-- DETALLE -->
     <table>
         <thead>
             <tr>
@@ -38,11 +46,13 @@
         <tbody id="detalle"></tbody>
     </table>
 
+    <!-- RESUMEN -->
     <div class="resumen">
         <p>Total: <span>S/ <span id="total">0.00</span></span></p>
         <p>Tiempo estimado: <span id="tiempoTotal">0</span> min</p>
     </div>
 
+    <!-- PRIORIDAD -->
     <div class="grid">
         <select id="prioridad">
             <option>Normal</option>
@@ -50,7 +60,9 @@
             <option>Urgente</option>
         </select>
 
-        <input type="text" id="justificacion" placeholder="Justificación" style="display:none;">
+        <input type="text" id="justificacion"
+        placeholder="Justificación (mín. 10 caracteres)"
+        style="display:none;">
     </div>
 
     <button type="submit">Guardar Pedido</button>
@@ -65,6 +77,8 @@
             <th>Mesa</th>
             <th>Mozo</th>
             <th>Total</th>
+            <th>Prioridad</th> <!-- 🔥 NUEVO -->
+            <th>Fecha</th>     <!-- 🔥 NUEVO -->
             <th>Estado</th>
             <th>Acciones</th>
         </tr>

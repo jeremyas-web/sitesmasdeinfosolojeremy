@@ -1,5 +1,6 @@
 let platos = [];
 let pedidos = JSON.parse(localStorage.getItem("pedidos")) || [];
+let facturas = JSON.parse(localStorage.getItem("facturas")) || [];
 
 let detalle = [];
 
@@ -11,14 +12,10 @@ function cargarPlatos() {
     let seleccionado = platoSelect.value;
 
     let nuevos = JSON.parse(localStorage.getItem("platos")) || [];
-
     if (nuevos.length === 0) return;
 
     platos = nuevos;
-
     platoSelect.innerHTML = "";
-
-    let seleccionadoExiste = false;
 
     platos
         .filter(p => p.estado && p.estado.trim() === "Activo")
@@ -26,20 +23,9 @@ function cargarPlatos() {
             let option = document.createElement("option");
             option.value = p.codigo;
             option.textContent = `${p.nombre} - S/ ${p.precio}`;
-
-            if (p.codigo === seleccionado) {
-                option.selected = true;
-                seleccionadoExiste = true;
-            }
-
             platoSelect.appendChild(option);
         });
-
-    if (!seleccionadoExiste && platoSelect.options.length > 0) {
-        platoSelect.selectedIndex = 0;
-    }
 }
-
 cargarPlatos();
 
 // ================== AUTO ACTUALIZACIÓN ==================
@@ -55,9 +41,15 @@ setInterval(() => {
     }
 }, 2000);
 
-// ================== GENERAR CÓDIGO ==================
+// ================== CÓDIGO ÚNICO ==================
 function generarCodigo() {
-    return "PED" + String(pedidos.length + 1).padStart(3, "0");
+    let num = 1;
+
+    while (pedidos.some(p => p.codigo === "PED" + String(num).padStart(3, "0"))) {
+        num++;
+    }
+
+    return "PED" + String(num).padStart(3, "0");
 }
 document.getElementById("codigoPedido").value = generarCodigo();
 
@@ -71,6 +63,7 @@ function agregarPlato() {
 
     if (!plato) return alert("Plato no encontrado");
     if (!cantidad || cantidad <= 0) return alert("Cantidad inválida");
+    if (obs.length > 150) return alert("Observación muy larga");
 
     let subtotal = cantidad * parseFloat(plato.precio);
 
@@ -78,10 +71,10 @@ function agregarPlato() {
         codigo,
         nombre: plato.nombre,
         precio: plato.precio,
-        tiempo: parseInt(plato.tiempo) || 0, // 🔥 NUEVO
+        tiempo: parseInt(plato.tiempo) || 0,
         cantidad,
         subtotal,
-        obs
+        observacion: obs
     });
 
     renderDetalle();
@@ -91,11 +84,11 @@ function agregarPlato() {
 function renderDetalle() {
     detalleTabla.innerHTML = "";
     let total = 0;
-    let tiempoTotal = 0; // 🔥 NUEVO
+    let tiempoTotal = 0;
 
     detalle.forEach(d => {
         total += d.subtotal;
-        tiempoTotal += d.tiempo * d.cantidad; // 🔥 NUEVO
+        tiempoTotal += d.tiempo * d.cantidad;
 
         detalleTabla.innerHTML += `
         <tr>
@@ -103,17 +96,16 @@ function renderDetalle() {
             <td>${d.cantidad}</td>
             <td>${d.precio}</td>
             <td>${d.subtotal.toFixed(2)}</td>
-            <td>${d.obs}</td>
+            <td>${d.observacion}</td>
         </tr>
         `;
     });
 
     document.getElementById("total").textContent = total.toFixed(2);
-    document.getElementById("tiempoTotal").textContent = tiempoTotal; // 🔥 NUEVO
+    document.getElementById("tiempoTotal").textContent = tiempoTotal;
 
-    // 🔥 PRIORIDAD SUGERIDA (NO OBLIGATORIA)
+    // PRIORIDAD AUTOMÁTICA
     let prioridadAuto = "Normal";
-
     if (tiempoTotal > 40) prioridadAuto = "Urgente";
     else if (tiempoTotal >= 20) prioridadAuto = "Alta";
 
@@ -126,6 +118,13 @@ document.getElementById("prioridad").addEventListener("change", function () {
         this.value === "Urgente" ? "block" : "none";
 });
 
+// ================== VALIDAR FACTURADO ==================
+function estaFacturado(pedido) {
+    return facturas.some(f =>
+        f.pedidos.some(p => p.codigo === pedido.codigo)
+    );
+}
+
 // ================== GUARDAR ==================
 document.getElementById("formPedido").addEventListener("submit", function (e) {
     e.preventDefault();
@@ -135,12 +134,18 @@ document.getElementById("formPedido").addEventListener("submit", function (e) {
     let prioridad = document.getElementById("prioridad").value;
     let justificacion = document.getElementById("justificacion").value;
 
-    if (mozo.length < 3) return alert("Mozo inválido");
-    if (isNaN(mesa) || mesa <= 0 || mesa > 50) return alert("Mesa inválida");
-    if (detalle.length === 0) return alert("Agregue platos");
+    // VALIDACIONES
+    if (mozo.length < 3 || /^\d+$/.test(mozo))
+        return alert("Mozo inválido");
+
+    if (isNaN(mesa) || mesa <= 0 || mesa > 50)
+        return alert("Mesa inválida");
+
+    if (detalle.length === 0)
+        return alert("Agregue platos");
 
     if (prioridad === "Urgente" && justificacion.length < 10)
-        return alert("Justificación requerida");
+        return alert("Justificación mínima 10 caracteres");
 
     let pedido = {
         codigo: generarCodigo(),
@@ -149,15 +154,16 @@ document.getElementById("formPedido").addEventListener("submit", function (e) {
         fecha: new Date().toLocaleString(),
         prioridad,
         justificacion,
-        estado: "Registrado",
-        detalle: [...detalle],
+        estado: "Enviado a cocina", // ✅ CORREGIDO
+        platos: [...detalle],       // ✅ CONSISTENTE CON MÓDULO 3
         total: document.getElementById("total").textContent,
-        tiempoTotal: document.getElementById("tiempoTotal").textContent // 🔥 NUEVO
+        tiempoTotal: document.getElementById("tiempoTotal").textContent
     };
 
     pedidos.push(pedido);
     localStorage.setItem("pedidos", JSON.stringify(pedidos));
 
+    alert("Pedido registrado y enviado a cocina");
     location.reload();
 });
 
@@ -175,9 +181,12 @@ function mostrarPedidos() {
             <td>${p.mesa}</td>
             <td>${p.mozo}</td>
             <td>S/ ${p.total}</td>
+            <td>${p.prioridad}</td>
+            <td>${p.fecha}</td>
             <td>${p.estado}</td>
             <td>
-                <button onclick="enviar(${i})">Enviar</button>
+                <button onclick="preparar(${i})">Preparar</button>
+                <button onclick="listar(${i})">Listo</button>
                 <button onclick="entregar(${i})">Entregar</button>
                 <button onclick="cancelar(${i})">Cancelar</button>
             </td>
@@ -187,8 +196,16 @@ function mostrarPedidos() {
 }
 
 // ================== ESTADOS ==================
-function enviar(i) {
-    pedidos[i].estado = "Enviado a cocina";
+function preparar(i) {
+    if (estaFacturado(pedidos[i])) return alert("Pedido ya facturado");
+
+    pedidos[i].estado = "En preparación";
+    localStorage.setItem("pedidos", JSON.stringify(pedidos));
+    mostrarPedidos();
+}
+
+function listar(i) {
+    pedidos[i].estado = "Listo para servir";
     localStorage.setItem("pedidos", JSON.stringify(pedidos));
     mostrarPedidos();
 }
@@ -200,6 +217,12 @@ function entregar(i) {
 }
 
 function cancelar(i) {
+    if (pedidos[i].estado === "Entregado")
+        return alert("No se puede cancelar un pedido entregado");
+
+    if (estaFacturado(pedidos[i]))
+        return alert("No se puede cancelar un pedido facturado");
+
     pedidos[i].estado = "Cancelado";
     localStorage.setItem("pedidos", JSON.stringify(pedidos));
     mostrarPedidos();
